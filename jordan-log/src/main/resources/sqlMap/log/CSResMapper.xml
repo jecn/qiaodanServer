@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.pub.platform.mapper.CSResMapper" >
+    <resultMap id="resultMap" type="org.safari.pub.platform.web.entity.CSRes" >
+        <id column="id" property="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="res_time" property="resTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        <result column="req_id" property="reqId" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="use_time" property="useTime" jdbcType="INTEGER" javaType="java.lang.Integer" />
+        <result column="data" property="data" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.res_time as "resTime", 
+        t.req_id as "reqId", 
+        t.use_time as "useTime", 
+        t.data as "data"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.pub.platform.web.entity.CSRes" >
+        select 
+        <include refid="column_list" />
+        from log_cs_res t 
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.pub.platform.web.entity.CSRes" >
+        insert into log_cs_res
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+               id,res_time,
+            <if test=" null != reqId and '' !=  reqId" >
+                req_id,
+            </if>
+            <if test=" null != useTime" >
+                use_time,
+            </if>
+            <if test=" null != data and '' !=  data" >
+                data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+               #{id},now(),
+            <if test=" null != reqId and '' !=  reqId" >
+                #{reqId},
+            </if>
+            <if test=" null != useTime" >
+                #{useTime},
+            </if>
+            <if test=" null != data and '' !=  data" >
+                #{data},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.log.main.mapper.LogExcptionMapper" >
+    <resultMap id="resultMap" type="org.safari.log.main.entity.LogExcption" >
+        <id column="id"                           property="id"                       jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="create_by"          property="createBy"            jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="create_time"       property="createTime"        jdbcType="TIMESTAMP"        javaType="java.util.Date" />
+        <result column="isp"                    property="isp"                     jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="terminal"            property="terminal"            jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="device_name"     property="deviceName"      jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="device_os"          property="deviceOs"           jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="device_ver"         property="deviceVer"         jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="lang"                  property="lang"                 jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="version"              property="version"             jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="net_type"            property="netType"           jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="excp_class"          property="excpClass"        jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="excp_method"     property="excpMethod"    jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="excp_desc"          property="excpDesc"         jdbcType="VARCHAR"            javaType="java.lang.String"  />
+        <result column="excp_data"          property="excpData"         jdbcType="LONGVARCHAR"   javaType="java.lang.String"  />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_by as "createBy", 
+        t.create_time as "createTime", 
+        t.isp as "isp", 
+        t.terminal as "terminal", 
+        t.device_name as "deviceName", 
+        t.device_os as "deviceOs", 
+        t.device_ver as "deviceVer", 
+        t.lang as "lang", 
+        t.version as "version", 
+        t.net_type as "netType", 
+        t.excp_class as "excpClass", 
+        t.excp_method as "excpMethod", 
+        t.excp_desc as "excpDesc",
+        t.excp_data as "excpData"
+    </sql>
+
+    <insert id="insert" parameterType="org.safari.log.main.entity.LogExcption" >
+        insert into log_excp
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+            <if test=" null != createBy and '' !=  createBy" >
+                create_by,
+            </if>
+                create_time,
+            <if test=" null != isp and '' !=  isp" >
+                isp,
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                terminal,
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                device_name,
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                device_os,
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                device_ver,
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                lang,
+            </if>
+            <if test=" null != version and '' !=  version" >
+                version,
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                net_type,
+            </if>
+            <if test=" null != excpClass and '' !=  excpClass" >
+                excp_class,
+            </if>
+            <if test=" null != excpMethod and '' !=  excpMethod" >
+                excp_method,
+            </if>
+            <if test=" null != excpDesc and '' !=  excpDesc" >
+                excp_desc,
+            </if>
+            <if test=" null != excpData and '' !=  excpData" >
+                excp_data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+            <if test=" null != createBy and '' !=  createBy" >
+                #{createBy},
+            </if>
+                now(),
+            <if test=" null != isp and '' !=  isp" >
+                #{isp},
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                #{terminal},
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                #{deviceName},
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                #{deviceOs},
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                #{deviceVer},
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                #{lang},
+            </if>
+            <if test=" null != version and '' !=  version" >
+                #{version},
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                #{netType},
+            </if>
+            <if test=" null != excpClass and '' !=  excpClass" >
+                #{excpClass},
+            </if>
+            <if test=" null != excpMethod and '' !=  excpMethod" >
+                #{excpMethod},
+            </if>
+            <if test=" null != excpDesc and '' !=  excpDesc" >
+                #{excpDesc},
+            </if>
+            <if test=" null != excpData and '' !=  excpData" >
+                #{excpData},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

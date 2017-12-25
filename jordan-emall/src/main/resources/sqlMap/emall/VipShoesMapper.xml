@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.emall.main.mapper.VipShoesMapper" >
+    <resultMap id="resultMap" type="org.safari.emall.main.entity.VipShoes" >
+        <id column="id"                           property="id"                     jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="create_time"      property="createTime"       jdbcType="TIMESTAMP"       javaType="java.util.Date" />
+        <result column="del_flag"            property="delFlag"             jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="remarks"            property="remarks"            jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="shoes_id"           property="shoesId"            jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="vip_id"               property="vipId"                 jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="code"                property="code"                 jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="name"               property="name"                jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="price"                property="price"                 jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="color"                property="color"                 jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="size"                  property="size"                   jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="style"                 property="style"                 jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="picture"             property="picture"              jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="buy_time"         property="buyTime"            jdbcType="DATE"                   javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        <!-- t.id as "id", 
+        t.create_time as "createTime", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        t.vip_id as "vipId", 
+        t.shoes_code as "shoesCode",
+        t.size as "size",
+        
+        s.id as "shoes.id", 
+        s.code as "shoes.code", 
+        s.style_number as "shoes.styleNumber", 
+        s.name as "shoes.name", 
+        s.price as "shoes.price", 
+        sd1.value as "shoes.marketTime", 
+        sd2.value as "shoes.color", 
+        sd3.value as "shoes.size", 
+        sd4.value as "shoes.forPeople", 
+        sd5.value as "shoes.forSpace", 
+        sd6.value as "shoes.forPosition",
+        sd7.value as "shoes.style", 
+        sd8.value as "shoes.function", 
+        sd9.value as "shoes.stat", 
+        concat(#{download},m.path) as "shoes.thumb",
+        s.pic_desc as "shoes.picDesc", 
+        s.text_desc as "shoes.textDesc" -->
+        
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        
+        t.shoes_id as "shoesId",
+        s.id as "shoes.id",
+        s.code as "shoes.code", 
+        s.style_number as "shoes.styleNumber", 
+        s.name as "shoes.name", 
+        s.price as "shoes.price", 
+        s.intro as "shoes.intro", 
+        concat(#{download},m1.folder,"/",m1.path) as "shoes.thumb",
+        
+        t.vip_id as "vipId", 
+        t.code as "code", 
+        t.name as "name", 
+        t.price as "price", 
+        t.color as "color", 
+        t.size as "size", 
+        t.style as "style", 
+        ifnull(concat(#{download},m.folder,"/",m.path),concat(#{download},m1.folder,"/",m1.path)) as "picture",
+        if(t.buy_time = null,"",unix_timestamp(t.buy_time)) as "buyTime"
+    </sql>
+
+    <sql id="joins" >
+        <!-- left join e_shoes s on s.code = t.shoes_code
+        left join sys_media m on m.id = s.thumb
+        left join e_shoes_dict sd1 on sd1.type = 'shoes_market' and sd1.label = s.market_time
+        left join e_shoes_dict sd2 on sd2.type = 'shoes_color' and sd2.label = s.color
+        left join e_shoes_dict sd3 on sd3.type = 'shoes_size' and sd3.label = s.size
+        left join e_shoes_dict sd4 on sd4.type = 'shoes_people' and sd4.label = s.for_people
+        left join e_shoes_dict sd5 on sd5.type = 'shoes_space' and sd5.label = s.for_space
+        left join e_shoes_dict sd6 on sd6.type = 'shoes_position' and sd6.label = s.for_position
+        left join e_shoes_dict sd7 on sd7.type = 'shoes_style' and sd7.label = s.style
+        left join e_shoes_dict sd8 on sd8.type = 'shoes_function' and sd8.label = s.function
+        left join e_shoes_dict sd9 on sd9.type = 'shoes_stat' and sd9.label = s.stat -->
+        left join sys_media m on m.id =t.picture
+        left join e_shoes s on s.id = t.shoes_id
+        left join sys_media m1 on m1.id =s.thumb
+    </sql>
+
+    <select id="findById" resultType="org.safari.emall.main.entity.VipShoes" >
+        select 
+        <include refid="column_list" />
+        from e_vip_shoes t 
+        <include refid="joins" />
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.emall.main.entity.VipShoes" >
+        insert into e_vip_shoes
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != remarks and '' !=  remarks" >
+                remarks,
+            </if>
+            <if test=" null != shoesId and '' !=  shoesId" >
+                shoes_id,
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != code and '' !=  code" >
+                code,
+            </if>
+            <if test=" null != name and '' !=  name" >
+                name,
+            </if>
+            <if test=" null != price and '' !=  price" >
+                price,
+            </if>
+            <if test=" null != color and '' !=  color" >
+                color,
+            </if>
+            <if test=" null != size and '' !=  size" >
+                size,
+            </if>
+            <if test=" null != style and '' !=  style" >
+                style,
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                picture,
+            </if>
+            <if test=" null != buyTime and '' !=  buyTime" >
+                buy_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != remarks and '' !=  remarks" >
+                #{remarks},
+            </if>
+            <if test=" null != shoesId and '' !=  shoesId" >
+                #{shoesId},
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != code and '' !=  code" >
+                #{code},
+            </if>
+            <if test=" null != name and '' !=  name" >
+                #{name},
+            </if>
+            <if test=" null != price and '' !=  price" >
+                #{price},
+            </if>
+            <if test=" null != color and '' !=  color" >
+                #{color},
+            </if>
+            <if test=" null != size and '' !=  size" >
+                #{size},
+            </if>
+            <if test=" null != style and '' !=  style" >
+                #{style},
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                #{picture},
+            </if>
+            <if test=" null != buyTime and '' !=  buyTime" >
+                from_unixtime(#{buyTime},'%Y-%m-%d'),
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        update e_vip_shoes set del_flag = #{deleteYes} where id = #{id}
+    </update>
+
+    <update id="unbund" >
+        update e_vip_shoes set del_flag = #{deleteYes} where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findByVipId" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from e_vip_shoes t 
+        <include refid="joins" />
+        where t.vip_id = #{vipId} and t.del_flag = #{deleteNo}
+    </select>
+    
+    <select id="findByVipIdAndCode" resultType="java.lang.Integer">
+        select count(0)  from e_vip_shoes t 
+        where t.vip_id = #{vipId} and t.code = #{code}
+        and t.del_flag = #{deleteNo}
+    </select>
+    
+</mapper>

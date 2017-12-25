@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sys.main.mapper.VersionMapper" >
+    <resultMap id="resultMap" type="org.safari.sys.main.entity.Version" >
+        <id column="id"                             property="id"                         jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="create_by"            property="createBy"              jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="create_time"         property="createTime"          jdbcType="TIMESTAMP"          javaType="java.util.Date" />
+        <result column="modify_by"           property="modifyBy"             jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="modify_time"        property="modifyTime"         jdbcType="TIMESTAMP"         javaType="java.util.Date" />
+        <result column="del_flag"               property="delFlag"                jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="remarks"              property="remarks"               jdbcType="VARCHAR"             javaType="java.lang.String" />
+        
+        <result column="type"                    property="type"                    jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="lowest_ver"           property="lowestVer"            jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="new_ver"              property="newVer"                jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="link"                     property="link"                      jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="is_able"                property="isAble"                   jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="desp"                   property="desp"                     jdbcType="VARCHAR"             javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_by as "createBy", 
+        t.create_time as "createTime", 
+        t.modify_by as "modifyBy", 
+        t.modify_time as "modifyTime", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        
+        t.type as "type", 
+        t.lowest_ver as "lowestVer", 
+        t.new_ver as "newVer", 
+        t.link as "link", 
+        t.is_able as "isAble", 
+        t.desp as "desp"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.sys.main.entity.Version" >
+        select 
+        <include refid="column_list" />
+        from sys_ver t 
+        where t.id = #{id}
+    </select>
+    
+    <select id="findByTypeAndAble"  resultType="org.safari.sys.main.entity.Version" >
+        select 
+        <include refid="column_list" />
+        from sys_ver t 
+        where t.type = #{type} and t.is_able = #{ableYes} and t.del_flag = #{deleteNo}
+        order by t.create_time desc
+        limit 1
+    </select>
+
+</mapper>

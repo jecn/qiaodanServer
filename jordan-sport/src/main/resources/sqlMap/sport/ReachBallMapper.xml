@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.ReachBallMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.ReachBall" >
+        <id column="id"                           property="id"                     jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="create_time"      property="createTime"       jdbcType="TIMESTAMP"  javaType="java.util.Date" />
+        <result column="remarks"            property="remarks"           jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="court_id"            property="courtId"            jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="vip_id"               property="vipId"                jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="slogan"              property="slogan"             jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="time"                 property="time"                 jdbcType="TIMESTAMP"  javaType="java.lang.String" />
+        <result column="duration"           property="duration"          jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="people"              property="people"            jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="type"                 property="type"                 jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="picture"             property="picture"             jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="longitude"         property="longitude"         jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="latitude"            property="latitude"            jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="province"          property="province"           jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="city"                  property="city"                   jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="district"             property="district"              jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="street"               property="street"               jdbcType="VARCHAR"      javaType="java.lang.String" />
+        <result column="address"            property="address"            jdbcType="VARCHAR"      javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        unix_timestamp(t.create_time) as "publish",
+        t.remarks as "remarks", 
+        t.court_id as "courtId", 
+        t.vip_id as "vipId", 
+        t.slogan as "slogan",
+        case 
+           when m1.source = 1 then concat(#{download},m1.folder,"/",m1.path)
+		   when m1.source = 2 then m1.url
+		end as "vipImg",
+        unix_timestamp(t.time) as "time",
+        t.duration as "duration",
+        t.people as "people", 
+        t.type as "type", 
+        concat(#{download},m2.folder,"/",m2.path) as "picture",
+        t.longitude as "longitude", 
+        t.latitude as "latitude", 
+        t.province as "province", 
+        t.city as "city", 
+        t.district as "district", 
+        t.street as "street", 
+        t.address as "address",
+        v.mobile as "mobile", 
+        ifnull(v.nick,ifnull(v.name,v.username)) as "contact"
+    </sql>
+
+    <sql id="joins" >
+    	left join u_vip v on v.id = t.vip_id
+        left join sys_media m1 on m1.id = v.img
+        left join sys_media m2 on m2.id = t.picture
+    </sql>
+
+	<sql id="condition">
+    	<where>
+    		1 = 1  
+    		<if test=" null != vipId and '' !=  vipId" >
+    			and t.vip_id=#{vipId}
+    		</if>
+    		<if test=" null != type and '' != type " >
+    			and t.type =#{type}
+    		</if>
+    		<if test=" null != beginTime and '' !=  beginTime" >
+    			and unix_timestamp(t.time) &gt;=#{beginTime}
+    		</if>
+    		<if test=" null != endTime and '' !=  endTime" >
+    			and unix_timestamp(t.time) &lt;=#{endTime}
+    		</if>
+    		<if test=" null != province and '' !=  province" >
+    			and t.province=#{province}
+    		</if>
+    		<if test=" null != city and '' !=  city" >
+    			and t.city=#{city}
+    		</if>
+    		<if test=" null != district and '' !=  district" >
+    			and t.district=#{district}
+    		</if>
+    		<if test=" null != limited and '' !=  limited" >
+    			and round(count_distance(#{latitude},#{longitude}, latitude, longitude), 3) &lt;= #{limited}
+    		</if>
+    	</where>
+    </sql>
+
+    <select id="findById" resultType="org.safari.sport.main.entity.ReachBall" >
+        select 
+        <include refid="column_list" />,
+        (select count(0) from s_join_reach j where j.rb_id = #{id}) as "join"
+        from s_reach_ball t 
+        <include refid = "joins"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.ReachBall" >
+        insert into s_reach_ball
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != remarks and '' !=  remarks" >
+                remarks,
+            </if>
+            
+            <if test=" null != courtId and '' !=  courtId" >
+                court_id,
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != slogan and '' !=  slogan" >
+                slogan,
+            </if>
+            <if test=" null != time  and '' !=  time" >
+                time,
+            </if>
+            <if test=" null != duration and '' !=  duration" >
+                duration,
+            </if>
+            <if test=" null != people and '' !=  people" >
+                people,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                picture,
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                longitude,
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                latitude,
+            </if>
+            <if test=" null != province and '' !=  province" >
+                province,
+            </if>
+            <if test=" null != city and '' !=  city" >
+                city,
+            </if>
+            <if test=" null != district and '' !=  district" >
+                district,
+            </if>
+            <if test=" null != street and '' !=  street" >
+                street,
+            </if>
+            <if test=" null != address and '' !=  address" >
+                address,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != remarks and '' !=  remarks" >
+                #{remarks},
+            </if>
+            <if test=" null != courtId and '' !=  courtId" >
+                #{courtId},
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != slogan and '' !=  slogan" >
+                #{slogan},
+            </if>
+            <if test=" null != time and '' !=  time" >
+                from_unixtime(#{time},'%Y-%m-%d %H:%i'),
+            </if>
+            <if test=" null != duration and '' !=  duration" >
+                #{duration},
+            </if>
+            <if test=" null != people and '' !=  people" >
+                #{people},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                #{picture},
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                #{longitude},
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                #{latitude},
+            </if>
+            <if test=" null != province and '' !=  province" >
+                #{province},
+            </if>
+            <if test=" null != city and '' !=  city" >
+                #{city},
+            </if>
+            <if test=" null != district and '' !=  district" >
+                #{district},
+            </if>
+            <if test=" null != street and '' !=  street" >
+                #{street},
+            </if>
+            <if test=" null != address and '' !=  address" >
+                #{address},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findCount" parameterType="org.safari.sport.main.entity.ReachBall" resultType="java.lang.Integer" >
+        select count(0) from s_reach_ball t 
+        <include refid="condition" />
+    </select>
+    
+    <select id="findPage" parameterType="org.safari.sport.main.entity.ReachBall" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        <if test=" null != limited and '' !=  limited" >
+         , round(count_distance(#{latitude},#{longitude}, latitude, longitude), 3) as distance
+        </if>
+        from s_reach_ball t 
+        <include refid="joins"/>
+        <include refid="condition" />
+        order by t.time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="findPageDistance" parameterType="org.safari.sport.main.entity.ReachBall" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />, 
+        round(count_distance(#{latitude},#{longitude}, latitude, longitude), 3) as distance
+        from s_reach_ball t 
+        <include refid="joins"/>
+        <include refid="condition" />
+        order by distance desc, t.time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+</mapper>

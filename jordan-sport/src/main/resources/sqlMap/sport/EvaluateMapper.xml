@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.EvaluateMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.Evaluate" >
+        <id column="id"                           property="id"                    jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="create_time"      property="createTime"      jdbcType="TIMESTAMP"      javaType="java.util.Date" />
+        <result column="modify_time"     property="modifyTime"     jdbcType="TIMESTAMP"     javaType="java.util.Date" />
+        <result column="vip_id"               property="vipId"                jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="position_eval"    property="positionEval"     jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="sport_eval"        property="sportEval"          jdbcType="VARCHAR"        javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.modify_time as "modifyTime", 
+        t.vip_id as "vipId", 
+        t.position_eval as "positionEval", 
+        t.sport_eval as "sportEval"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.sport.main.entity.Evaluate" >
+        select 
+        <include refid="column_list" />
+        from s_evaluate t 
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.Evaluate" >
+        insert into s_evaluate
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != positionEval and '' !=  positionEval" >
+                position_eval,
+            </if>
+            <if test=" null != sportEval and '' !=  sportEval" >
+                sport_eval,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+               now(),
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != positionEval and '' !=  positionEval" >
+                #{positionEval},
+            </if>
+            <if test=" null != sportEval and '' !=  sportEval" >
+                #{sportEval},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="modify" parameterType="org.safari.sport.main.entity.Evaluate" >
+        update s_evaluate set 
+            modify_time = now(),
+            position_eval = #{positionEval},
+            sport_eval = #{sportEval}
+        where vip_id = #{vipId},
+    </update>
+
+    <select id="findByVipId" parameterType="java.lang.String" resultType="org.safari.sport.main.entity.Evaluate" >
+        select 
+        <include refid="column_list" />
+        from s_evaluate t 
+        where t.vip_id = #{vipId}
+    </select>
+
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.log.main.mapper.LogRegisterMapper" >
+    <resultMap id="resultMap" type="org.safari.log.main.entity.LogRegister" >
+        <id column="id"                                    property="id"                           jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="reg_time"                   property="regTime"                  jdbcType="TIMESTAMP"       javaType="java.util.Date" />
+        <result column="ip"                              property="ip"                           jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="country"                     property="country"                  jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="area"                          property="area"                       jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="region"                       property="region"                    jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="city"                            property="city"                        jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="county"                       property="county"                   jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="isp"                             property="isp"                         jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="terminal"                    property="terminal"                 jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="device_name"             property="deviceName"           jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="device_id"                   property="deviceId"                 jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="device_os"                  property="deviceOs"                jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="device_token"             property="deviceToken"          jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="device_ver"                 property="deviceVer"              jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="lang"                          property="lang"                      jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="version"                      property="version"                  jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="net_type"                    property="netType"                jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="account"                     property="account"                jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="type"                          property="type"                      jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="reg_code"                   property="regCode"                jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="reg_desc"                   property="regDesc"                 jdbcType="VARCHAR"           javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.reg_time as "regTime", 
+        t.ip as "ip", 
+        t.country as "country", 
+        t.area as "area", 
+        t.region as "region", 
+        t.city as "city", 
+        t.county as "county", 
+        t.isp as "isp", 
+        t.terminal as "terminal", 
+        t.device_name as "deviceName", 
+        t.device_id as "deviceId", 
+        t.device_os as "deviceOs", 
+        t.device_token as "deviceToken", 
+        t.device_ver as "deviceVer", 
+        t.lang as "lang", 
+        t.version as "version", 
+        t.net_type as "netType", 
+        t.account as "account", 
+        t.type as "type", 
+        t.reg_code as "regCode", 
+        t.reg_desc as "regDesc"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.log.main.entity.LogRegister" >
+        select 
+        <include refid="column_list" />
+        from log_register t 
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.log.main.entity.LogRegister" >
+        insert into log_register
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                reg_time,
+            <if test=" null != ip and '' !=  ip" >
+                ip,
+            </if>
+            <if test=" null != country and '' !=  country" >
+                country,
+            </if>
+            <if test=" null != area and '' !=  area" >
+                area,
+            </if>
+            <if test=" null != region and '' !=  region" >
+                region,
+            </if>
+            <if test=" null != city and '' !=  city" >
+                city,
+            </if>
+            <if test=" null != county and '' !=  county" >
+                county,
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                isp,
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                terminal,
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                device_name,
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                device_id,
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                device_os,
+            </if>
+            <if test=" null != deviceToken and '' !=  deviceToken" >
+                device_token,
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                device_ver,
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                lang,
+            </if>
+            <if test=" null != version and '' !=  version" >
+                version,
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                net_type,
+            </if>
+            <if test=" null != account and '' !=  account" >
+                account,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != regCode and '' !=  regCode" >
+                reg_code,
+            </if>
+            <if test=" null != regDesc and '' !=  regDesc" >
+                reg_desc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != ip and '' !=  ip" >
+                #{ip},
+            </if>
+            <if test=" null != country and '' !=  country" >
+                #{country},
+            </if>
+            <if test=" null != area and '' !=  area" >
+                #{area},
+            </if>
+            <if test=" null != region and '' !=  region" >
+                #{region},
+            </if>
+            <if test=" null != city and '' !=  city" >
+                #{city},
+            </if>
+            <if test=" null != county and '' !=  county" >
+                #{county},
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                #{isp},
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                #{terminal},
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                #{deviceName},
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                #{deviceId},
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                #{deviceOs},
+            </if>
+            <if test=" null != deviceToken and '' !=  deviceToken" >
+                #{deviceToken},
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                #{deviceVer},
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                #{lang},
+            </if>
+            <if test=" null != version and '' !=  version" >
+                #{version},
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                #{netType},
+            </if>
+            <if test=" null != account and '' !=  account" >
+                #{account},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != regCode and '' !=  regCode" >
+                #{regCode},
+            </if>
+            <if test=" null != regDesc and '' !=  regDesc" >
+                #{regDesc},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

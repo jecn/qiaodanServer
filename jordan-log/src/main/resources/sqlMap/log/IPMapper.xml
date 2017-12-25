@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.pub.platform.mapper.IPMapper" >
+    <resultMap id="resultMap" type="org.safari.pub.platform.web.entity.IPEntity" >
+        <id column="id" property="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="country" property="country" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="area" property="area" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="region" property="region" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="city" property="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="county" property="county" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="isp" property="isp" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.ip as "ip", 
+        t.country as "country", 
+        t.area as "area", 
+        t.region as "region", 
+        t.city as "city", 
+        t.county as "county", 
+        t.isp as "isp"
+    </sql>
+
+    <select id="findByIP" parameterType="java.lang.String" resultType="org.safari.pub.platform.web.entity.IPEntity" >
+        select 
+        <include refid="column_list" />
+        from log_ip t 
+        where t.ip = #{ip} 
+        order by t.create_time desc limit 1
+    </select>
+
+    <insert id="insert" parameterType="org.safari.pub.platform.web.entity.IPEntity" >
+        insert into log_ip
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+                id,create_time,
+            <if test=" null != ip and '' !=  ip" >
+                ip,
+            </if>
+            <if test=" null != country and '' !=  country" >
+                country,
+            </if>
+            <if test=" null != area and '' !=  area" >
+                area,
+            </if>
+            <if test=" null != region and '' !=  region" >
+                region,
+            </if>
+            <if test=" null != city and '' !=  city" >
+                city,
+            </if>
+            <if test=" null != county and '' !=  county" >
+                county,
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                isp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+              #{id},now(),
+            <if test=" null != ip and '' !=  ip" >
+                #{ip},
+            </if>
+            <if test=" null != country and '' !=  country" >
+                #{country},
+            </if>
+            <if test=" null != area and '' !=  area" >
+                #{area},
+            </if>
+            <if test=" null != region and '' !=  region" >
+                #{region},
+            </if>
+            <if test=" null != city and '' !=  city" >
+                #{city},
+            </if>
+            <if test=" null != county and '' !=  county" >
+                #{county},
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                #{isp},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

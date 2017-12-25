@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.TrainSaveMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.TrainSave" >
+        <id column="id"                             property="id"                       jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="create_time"        property="createTime"        jdbcType="TIMESTAMP"   javaType="java.lang.String" />
+        <result column="del_flag"              property="delFlag"               jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="remarks"              property="remarks"             jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="vip_id"                 property="vipId"                  jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="move_id"             property="moveId"              jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="type"                   property="type"                   jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="terminal"             property="terminal"             jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="platform"             property="platform"            jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="source"                property="source"               jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="say"                     property="say"                    jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="url"                      property="url"                     jdbcType="VARCHAR"      javaType="java.lang.String"  />
+        <result column="img"                    property="img"                    jdbcType="VARCHAR"      javaType="java.lang.String"  />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        unix_timestamp(t.create_time) as "createTimeStr", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        
+        t.vip_id as "vipId", 
+        t.move_id as "moveId", 
+        t.type as "type", 
+        t.terminal as "terminal", 
+        t.platform as "platform", 
+        t.source as "source", 
+        t.say as "say",
+        t.url as "url",
+        case 
+           when m.source = 1 then concat(#{download},m.folder,"/",m.path)
+		   when m.source = 2 then m.url
+		end as "img"
+ 
+    </sql>
+
+    <sql id="joins" >
+        left join sys_media m on m.id = t.img
+    </sql>
+    
+    <sql id="condition" >
+        <where>
+        	1 = 1 and t.del_flag = #{delFlag}
+        	<if test="null != vipId and '' != vipId">
+        		and t.vip_id = #{vipId}
+        	</if>
+        	<if test="null != type and '' != type">
+        		and t.type = #{type}
+        	</if>
+        </where>
+    </sql>
+
+    <select id="findById" resultType="org.safari.sport.main.entity.TrainSave" >
+        select 
+        <include refid="column_list" />
+        from s_train_save t 
+        <include refid="joins"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.TrainSave" >
+        insert into s_train_save
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != delFlag and '' !=  delFlag" >
+                del_flag,
+            </if>
+            <if test=" null != remarks and '' !=  remarks" >
+                remarks,
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != moveId and '' !=  moveId" >
+                move_id,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                terminal,
+            </if>
+            <if test=" null != platform and '' !=  platform" >
+                platform,
+            </if>
+            <if test=" null != source and '' !=  source" >
+                source,
+            </if>
+            <if test=" null != say and '' !=  say" >
+                say,
+            </if>
+            <if test=" null != url and '' !=  url" >
+                url,
+            </if>
+            <if test=" null != img and '' != img" >
+                img,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+           		now(),
+            <if test=" null != delFlag and '' !=  delFlag" >
+                #{delFlag},
+            </if>
+            <if test=" null != remarks and '' !=  remarks" >
+                #{remarks},
+            </if>
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != moveId and '' !=  moveId" >
+                #{moveId},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                #{terminal},
+            </if>
+            <if test=" null != platform and '' !=  platform" >
+                #{platform},
+            </if>
+            <if test=" null != source and '' !=  source" >
+                #{source},
+            </if>
+            <if test=" null != say and '' !=  say" >
+                #{say},
+            </if>
+            <if test=" null != url and '' !=  url" >
+                #{url},
+            </if>
+            <if test=" null != img and '' != img" >
+                #{img},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteById" parameterType="java.lang.String" >
+        update s_train_save set del_flag = #{deleteYes} where id = #{id}
+    </update>
+
+    <update id="deleteByIds" parameterType="java.util.List" >
+        update s_train_save set del_flag = #{deleteYes} where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findCount" parameterType="org.safari.sport.main.entity.TrainSave" resultType="java.lang.Integer" >
+        select count(0) from s_train_save t 
+        <include refid="condition" />
+    </select>
+
+    <select id="findPage" parameterType="org.safari.sport.main.entity.TrainSave" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from s_train_save t 
+        <include refid="joins"/>
+        <include refid="condition" />
+        order by t.create_time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.user.main.mapper.BluetoothMapper" >
+    <resultMap id="resultMap" type="org.safari.user.main.entity.Bluetooth" >
+        <id column="id"                             property="id"                     jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="create_time"        property="createTime"       jdbcType="TIMESTAMP"      javaType="java.lang.String" />
+        <result column="vip_id"                 property="vipId"                 jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="name"                 property="name"                jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="mac"                   property="mac"                  jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="sn"                      property="sn"                     jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="unbund_time"     property="unbundTime"     jdbcType="TIMESTAMP"      javaType="java.lang.String" />
+        <result column="stat"                    property="stat"                  jdbcType="VARCHAR"          javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        unix_timestamp(t.create_time) as "createTime", 
+        t.vip_id as "vipId", 
+        t.name as "name", 
+        t.mac as "mac", 
+        t.sn as "sn",
+        t.unbund_time as "unbundTime", 
+        t.stat as "stat"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.user.main.entity.Bluetooth" >
+        select 
+        <include refid="column_list" />
+        from u_bht t 
+        where t.id = #{id}
+    </select>
+
+    <insert id="bind" parameterType="org.safari.user.main.entity.Bluetooth" >
+        insert into u_bht
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+                id, create_time,
+            <if test=" null != vipId and '' != vipId" >
+                vip_id,
+            </if>
+            <if test=" null != name and '' != name" >
+                name,
+            </if>
+            <if test=" null != mac and '' != mac" >
+                mac,
+            </if>
+            <if test=" null != sn and '' != sn" >
+                sn,
+            </if>
+            <if test=" null != stat and '' != stat" >
+                stat,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+                #{id},now(),
+            <if test=" null != vipId and '' != vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != name and '' != name" >
+                #{name},
+            </if>
+            <if test=" null != mac and '' != mac" >
+                #{mac},
+            </if>
+            <if test=" null != sn and '' != sn" >
+                #{sn},
+            </if>
+            <if test=" null != stat and '' != stat" >
+                #{stat},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="unbund" >
+        update u_bht set unbund_time = now(), stat = '0'
+        where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
+    
+    <update id="update" >
+        update u_bht set name = #{name} where id = #{id}
+    </update>
+
+    <select id="findByVipId" parameterType="java.lang.String" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from u_bht t 
+        where t.vip_id = #{vipId} and t.stat='1'
+        order by t.create_time desc
+    </select>
+    
+    <select id="findByVipIdAndMac" resultType="org.safari.user.main.entity.Bluetooth">
+        select 
+        <include refid="column_list" />
+        from u_bht t 
+        where t.vip_id = #{vipId} and t.mac =#{mac} and t.stat='1'
+        order by t.create_time desc
+    </select>
+
+</mapper>

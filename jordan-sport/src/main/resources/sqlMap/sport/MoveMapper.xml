@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.MoveMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.Move" >
+        <id column="id"                                  property="id"                                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="create_time"             property="createTime"                    jdbcType="TIMESTAMP"             javaType="java.util.Date" />
+        <result column="del_flag"                   property="delFlag"                          jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="vip_id"                      property="vipId"                             jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="sn"                       		property="sn"                                 jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="footer"                      property="footer"                           jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="longitude"                 property="longitude"                      jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="latitude"                    property="latitude"                         jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="address"                    property="address"                        jdbcType="VARCHAR"                 javaType="java.lang.String" />
+        <result column="begin_time"               property="beginTime"                    jdbcType="TIMESTAMP"             javaType="java.lang.String" />
+        <result column="spend"                       property="spend"                           jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="picture"                      property="picture"                         jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="end_time"                   property="endTime"                      jdbcType="TIMESTAMP"             javaType="java.lang.String" />
+        <result column="total_dist"                   property="totalDist"                       jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="total_step"                  property="totalStep"                      jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="total_hor_dist"            property="totalHorDist"                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="total_ver_dist"             property="totalVerDist"                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="total_time"                  property="totalTime"                     jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="total_active_time"        property="totalActiveTime"           jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="active_rate"                 property="activeRate"                   jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="avg_speed"                 property="avgSpeed"                    jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="max_speed"                property="maxSpeed"                   jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="spurt_count"               property="spurtCount"                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="breakin_count"            property="breakinCount"              jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="breakin_avg_time"       property="breakinAvgTime"          jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="ver_jump_point"          property="verJumpPoint"              jdbcType="LONGVARCHAR"       javaType="java.lang.String" />
+        <result column="ver_jump_count"         property="verJumpCount"             jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="ver_jump_avg_high"    property="verJumpAvgHigh"          jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="ver_jump_max_high"    property="verJumpMaxHigh"        jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="avg_hover_time"          property="avgHoverTime"             jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="avg_touch_angle"        property="avgTouchAngle"           jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="touch_type"                 property="touchType"                   jdbcType="VARCHAR"                javaType="java.lang.String" />
+    	<result column="perf_rank"                    property="perfRank"                     jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="run_rank"                     property="runRank"                      jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="break_rank"                  property="breakRank"                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="bounce_rank"               property="bounceRank"               jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="avg_shot_dist"              property="avgShotDist"                jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="max_shot_dist"             property="maxShotDist"               jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="max_wallup"                 property="maxWallup"                 jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="avg_wallup"                  property="avgWallup"                  jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="handle"                        property="handle"                        jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="calorie"                        property="calorie"                        jdbcType="VARCHAR"                javaType="java.lang.String" />
+    	<result column="trail"                            property="trail"                             jdbcType="LONGVARCHAR"       javaType="java.lang.String" />
+    	<result column="type"                           property="type"                            jdbcType="VARCHAR"                javaType="java.lang.String" />
+    	<result column="field_type"                   property="fieldType"                     jdbcType="VARCHAR"                javaType="java.lang.String" />
+    	<result column="header"                       property="header"                        jdbcType="VARCHAR"                javaType="java.lang.String" />
+    </resultMap> 
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.del_flag as "delFlag", 
+        t.vip_id as "vipId", 
+        t.sn as "sn",
+        t.footer as "footer",
+        t.longitude as "longitude", 
+        t.latitude as "latitude", 
+        t.address as "address", 
+        if( t.begin_time = null,"",unix_timestamp(t.begin_time)) as "beginTime", 
+        t.spend as "spend", 
+        concat(#{download},m.folder,"/",m.path) as "picture",
+        if( t.end_time = null,"",unix_timestamp(t.end_time)) as "endTime", 
+        t.total_dist as "totalDist", 
+        t.total_step as "totalStep", 
+        t.total_hor_dist as "totalHorDist", 
+        t.total_ver_dist as "totalVerDist", 
+        t.total_time as "totalTime", 
+        t.total_active_time as "totalActiveTime", 
+        t.active_rate as "activeRate", 
+        t.avg_speed as "avgSpeed", 
+        t.max_speed as "maxSpeed", 
+        t.spurt_count as "spurtCount", 
+        t.breakin_count as "breakinCount", 
+        t.breakin_avg_time as "breakinAvgTime", 
+        t.ver_jump_point as "verJumpPoint", 
+        t.ver_jump_count as "verJumpCount", 
+        t.ver_jump_avg_high as "verJumpAvgHigh", 
+        t.ver_jump_max_high as "verJumpMaxHigh", 
+        t.avg_hover_time as "avgHoverTime", 
+        t.avg_touch_angle as "avgTouchAngle", 
+        t.touch_type as "touchType", 
+        t.perf_rank as "perfRank", 
+        t.run_rank as "runRank", 
+        t.break_rank as "breakRank", 
+        t.bounce_rank as "bounceRank", 
+        t.avg_shot_dist as "avgShotDist", 
+        t.max_shot_dist as "maxShotDist", 
+        t.max_wallup as "maxWallup",
+        t.avg_wallup as "avgWallup",
+        t.handle as "handle", 
+        t.calorie as "calorie",
+        t.trail as "trail",
+        t.type as "type",
+        t.field_type as "fieldType"
+    </sql>
+    
+    <sql id="column_list1" >
+        t.id as "id", 
+        t.footer as "footer",
+        t.longitude as "longitude", 
+        t.latitude as "latitude", 
+        t.address as "address", 
+        if( t.begin_time = null,"",unix_timestamp(t.begin_time)) as "beginTime", 
+        concat(#{download},m.folder,"/",m.path) as "picture",
+        t.total_dist as "totalDist", 
+        t.total_time as "totalTime"
+    </sql>
+
+    <sql id="joins" >
+        left join sys_media m on m.id = t.picture
+    </sql>
+    
+    <sql id ="condition">
+    	<where>
+        	1= 1 and t.vip_id = #{vipId} and t.del_flag = #{delFlag}
+        	<if test=" null != beginTime and  '' !=beginTime and '-1' != beginTime" >
+                and unix_timestamp(t.create_time) &gt;= #{beginTime}
+            </if>
+            <if test=" null != endTime and '' !=  endTime and '-1' != endTime" >
+                and unix_timestamp(t.create_time) &lt;= #{endTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findById"  resultType="org.safari.sport.main.entity.Move" >
+        select 
+        <include refid="column_list" />
+        from s_move t 
+        <include refid="joins"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.Move" >
+        insert into s_move
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != sn and '' !=  sn" >
+                sn,
+            </if>
+             <if test=" null != footer and '' !=  footer" >
+                footer,
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                longitude,
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                latitude,
+            </if>
+            <if test=" null != address and '' !=  address" >
+                address,
+            </if>
+            <if test=" null != beginTime and '' !=  beginTime"  >
+                begin_time,
+            </if>
+            <if test=" null != spend and '' !=  spend" >
+                spend,
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                picture,
+            </if>
+            <if test=" null != endTime and '' !=  endTime" >
+                end_time,
+            </if>
+            <if test=" null != totalDist and '' !=  totalDist" >
+                total_dist,
+            </if>
+            <if test=" null != totalStep and '' !=  totalStep" >
+                total_step,
+            </if>
+            <if test=" null != totalHorDist and '' !=  totalHorDist" >
+                total_hor_dist,
+            </if>
+            <if test=" null != totalVerDist and '' !=  totalVerDist" >
+                total_ver_dist,
+            </if>
+            <if test=" null != totalTime and '' !=  totalTime" >
+                total_time,
+            </if>
+            <if test=" null != totalActiveTime and '' !=  totalActiveTime" >
+                total_active_time,
+            </if>
+            <if test=" null != activeRate and '' !=  activeRate" >
+                active_rate,
+            </if>
+            <if test=" null != avgSpeed and '' !=  avgSpeed" >
+                avg_speed,
+            </if>
+            <if test=" null != maxSpeed and '' !=  maxSpeed" >
+                max_speed,
+            </if>
+            <if test=" null != spurtCount and '' !=  spurtCount" >
+                spurt_count,
+            </if>
+            <if test=" null != breakinCount and '' !=  breakinCount" >
+                breakin_count,
+            </if>
+            <if test=" null != breakinAvgTime and '' !=  breakinAvgTime" >
+                breakin_avg_time,
+            </if>
+            <if test=" null != verJumpPoint and '' !=  verJumpPoint" >
+                ver_jump_point,
+            </if>
+            <if test=" null != verJumpCount and '' !=  verJumpCount" >
+                ver_jump_count,
+            </if>
+            <if test=" null != verJumpAvgHigh and '' !=  verJumpAvgHigh" >
+                ver_jump_avg_high,
+            </if>
+            <if test=" null != verJumpMaxHigh and '' !=  verJumpMaxHigh" >
+                ver_jump_max_high,
+            </if>
+            <if test=" null != avgHoverTime and '' !=  avgHoverTime" >
+                avg_hover_time,
+            </if>
+            <if test=" null != avgTouchAngle and '' !=  avgTouchAngle" >
+                avg_touch_angle,
+            </if>
+            <if test=" null != touchType and '' !=  touchType" >
+                touch_type,
+            </if>
+            <if test=" null != perfRank and '' !=  perfRank" >
+                perf_rank,
+            </if>
+            <if test=" null != runRank and '' !=  runRank" >
+                run_rank,
+            </if>
+            <if test=" null != breakRank and '' !=  breakRank" >
+                break_rank,
+            </if>
+            <if test=" null != bounceRank and '' !=  bounceRank" >
+                bounce_rank,
+            </if>
+            <if test=" null != avgShotDist and '' !=  avgShotDist" >
+                avg_shot_dist,
+            </if>
+            <if test=" null != maxShotDist and '' !=  maxShotDist" >
+                max_shot_dist,
+            </if>
+            <if test=" null != maxWallup and '' !=  maxWallup" >
+                max_wallup,
+            </if>
+            <if test=" null != avgWallup and '' !=  avgWallup" >
+                avg_wallup,
+            </if>
+            <if test=" null != handle and '' !=  handle" >
+                handle,
+            </if>
+            <if test=" null != calorie and '' !=  calorie" >
+                calorie,
+            </if>
+            <if test=" null != trail and '' !=  trail" >
+                trail,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != fieldType and '' !=  fieldType" >
+                field_type,
+            </if>
+            <if test=" null != header and '' !=  header" >
+                header,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != sn and '' !=  sn" >
+                #{sn},
+            </if>
+            <if test=" null != footer and '' !=  footer" >
+                #{footer},
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                #{longitude},
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                #{latitude},
+            </if>
+            <if test=" null != address and '' !=  address" >
+                #{address},
+            </if>
+            <if test=" null != beginTime and '' !=  beginTime" >
+                from_unixtime(#{beginTime},'%Y-%m-%d %H:%i:%s'),
+            </if>
+            <if test=" null != spend and '' !=  spend" >
+                #{spend},
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                #{picture},
+            </if>
+            <if test=" null != endTime and '' !=  endTime" >
+                from_unixtime(#{endTime},'%Y-%m-%d %H:%i:%s'),
+            </if>
+            <if test=" null != totalDist and '' !=  totalDist" >
+                #{totalDist},
+            </if>
+            <if test=" null != totalStep and '' !=  totalStep" >
+                #{totalStep},
+            </if>
+            <if test=" null != totalHorDist and '' !=  totalHorDist" >
+                #{totalHorDist},
+            </if>
+            <if test=" null != totalVerDist and '' !=  totalVerDist" >
+                #{totalVerDist},
+            </if>
+            <if test=" null != totalTime and '' !=  totalTime" >
+                #{totalTime},
+            </if>
+            <if test=" null != totalActiveTime and '' !=  totalActiveTime" >
+                #{totalActiveTime},
+            </if>
+            <if test=" null != activeRate and '' !=  activeRate" >
+                #{activeRate},
+            </if>
+            <if test=" null != avgSpeed and '' !=  avgSpeed" >
+                #{avgSpeed},
+            </if>
+            <if test=" null != maxSpeed and '' !=  maxSpeed" >
+                #{maxSpeed},
+            </if>
+            <if test=" null != spurtCount and '' !=  spurtCount" >
+                #{spurtCount},
+            </if>
+            <if test=" null != breakinCount and '' !=  breakinCount" >
+                #{breakinCount},
+            </if>
+            <if test=" null != breakinAvgTime and '' !=  breakinAvgTime" >
+                #{breakinAvgTime},
+            </if>
+            <if test=" null != verJumpPoint and '' !=  verJumpPoint" >
+                #{verJumpPoint},
+            </if>
+            <if test=" null != verJumpCount and '' !=  verJumpCount" >
+                #{verJumpCount},
+            </if>
+            <if test=" null != verJumpAvgHigh and '' !=  verJumpAvgHigh" >
+                #{verJumpAvgHigh},
+            </if>
+            <if test=" null != verJumpMaxHigh and '' !=  verJumpMaxHigh" >
+                #{verJumpMaxHigh},
+            </if>
+            <if test=" null != avgHoverTime and '' !=  avgHoverTime" >
+                #{avgHoverTime},
+            </if>
+            <if test=" null != avgTouchAngle and '' !=  avgTouchAngle" >
+                #{avgTouchAngle},
+            </if>
+            <if test=" null != touchType and '' !=  touchType" >
+                #{touchType},
+            </if>
+            <if test=" null != perfRank and '' !=  perfRank" >
+                #{perfRank},
+            </if>
+            <if test=" null != runRank and '' !=  runRank" >
+                #{runRank},
+            </if>
+            <if test=" null != breakRank and '' !=  breakRank" >
+                #{breakRank},
+            </if>
+            <if test=" null != bounceRank and '' !=  bounceRank" >
+                #{bounceRank},
+            </if>
+            <if test=" null != avgShotDist and '' !=  avgShotDist" >
+                #{avgShotDist},
+            </if>
+            <if test=" null != maxShotDist and '' !=  maxShotDist" >
+                #{maxShotDist},
+            </if>
+            <if test=" null != maxWallup and '' !=  maxWallup" >
+                #{maxWallup},
+            </if>
+            <if test=" null != avgWallup and '' !=  avgWallup" >
+                #{avgWallup},
+            </if>
+            <if test=" null != handle and '' !=  handle" >
+                #{handle},
+            </if>
+            <if test=" null != calorie and '' !=  calorie" >
+                #{calorie},
+            </if>
+            <if test=" null != trail and '' !=  trail" >
+                #{trail},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != fieldType and '' !=  fieldType" >
+               #{fieldType},
+            </if>
+            <if test=" null != header and '' !=  header" >
+                #{header},
+            </if>
+        </trim>
+    </insert>
+    
+    <insert id="insertBatch" >
+    	 insert into s_move(id, create_time, vip_id, sn, footer, longitude, latitude, address, 
+    	  begin_time, end_time, spend, picture, total_dist, total_step, total_hor_dist, total_ver_dist, total_time,
+    	  total_active_time, active_rate, avg_speed, max_speed, spurt_count, breakin_count, breakin_avg_time, 
+    	  ver_jump_point, ver_jump_count, ver_jump_avg_high, ver_jump_max_high, avg_hover_time, 
+    	  avg_touch_angle, touch_type, perf_rank, run_rank, break_rank, bounce_rank, avg_shot_dist, 
+    	  max_shot_dist, max_wallup,avg_wallup,handle, calorie, trail,type,field_type,header)  values 
+    	 <foreach collection="moves" item="item" index="index" separator="," >  
+       	 	(#{item.id},now(),#{item.vipId},#{item.sn},#{item.footer},#{item.longitude},#{item.latitude},#{item.address},
+       	 	from_unixtime(#{item.beginTime},'%Y-%m-%d %H:%i:%s'),from_unixtime(#{item.endTime},'%Y-%m-%d %H:%i:%s'),
+       	 	#{item.spend},#{item.picture},#{item.totalDist},#{item.totalStep},#{item.totalHorDist},#{item.totalVerDist},#{item.totalTime},
+       	 	#{item.totalActiveTime},#{item.activeRate},#{item.avgSpeed},#{item.maxSpeed},#{item.spurtCount},#{item.breakinCount},
+       	 	#{item.breakinAvgTime},#{item.verJumpPoint},#{item.verJumpCount},#{item.verJumpAvgHigh},#{item.verJumpMaxHigh},
+       	 	#{item.avgHoverTime},#{item.avgTouchAngle},#{item.touchType},#{item.perfRank},#{item.runRank},#{item.breakRank},
+       	 	#{item.bounceRank},#{item.avgShotDist},#{item.maxShotDist},#{item.maxWallup},#{item.avgWallup},#{item.handle},#{item.calorie},
+       	 	#{item.trail},#{item.type},#{item.fieldType},#{item.header})
+    	 </foreach> 
+    </insert>
+    
+    <update id="deleteById" >
+        update s_move set del_flag=#{deleteYes} where id = #{id}
+    </update>
+
+    <update id="deleteByIds">
+        update s_move set del_flag=#{deleteYes} where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
+    
+    <select id="findByVipIdAndBeginTime" parameterType="org.safari.sport.main.entity.Move" resultType="org.safari.sport.main.entity.Move" >
+       select 
+        <include refid="column_list1" />
+        from s_move t 
+        <include refid="joins"/>
+        where 1=1
+        <if test=" null != beginTime and '' !=  beginTime" >
+            and t.begin_time = from_unixtime(#{beginTime},'%Y-%m-%d %H:%i:%s') 
+        </if>
+        and t.vip_id = #{vipId} and t.del_flag = #{delFlag}
+    </select>
+    
+    <select id="findAllByVipId" parameterType="java.lang.String" resultType="java.lang.Integer" >
+        select count(0) from s_move t where t.vip_id = #{vipId}
+    </select>
+    
+    <select id="findCountByVipIdAndCycle" parameterType="org.safari.sport.main.entity.Move" resultType="java.lang.Integer" >
+        select count(0) from s_move t 
+        <include refid="condition"/>
+    </select>
+
+    <select id="findListByVipIdAndCycle" parameterType="org.safari.sport.main.entity.Move" resultMap="resultMap" >
+        select 
+        <include refid="column_list1" />
+        from s_move t 
+        <include refid="joins"/>
+        <include refid="condition"/>
+        order by t.begin_time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+    
+    <select id="findRadar" resultType="org.safari.sport.main.entity.Move">
+		select
+			max(a.avg_ver_jump_avg_high) as "maxVerJumpAvgHigh",
+			min(a.avg_ver_jump_avg_high) as "minVerJumpAvgHigh",
+			max(a.avg_ver_jump_count) as "maxVerJumpCount",
+			min(a.avg_ver_jump_count) as "minVerJumpCount",
+			max(a.avg_breakin_avg_time) as "maxBreakinAvgTime",
+			min(a.avg_breakin_avg_time) as "minBreakinAvgTime",
+			max(a.avg_spurt_count) as "maxSpurtCount",
+			min(a.avg_spurt_count) as "minSpurtCount",
+			max(a.avg_jump_max_high) as "maxVerJumpMaxHigh",
+			min(a.avg_jump_max_high) as "minVerJumpMaxHigh",
+			max(a.avg_max_speed) as "maxMaxSpeed",
+			min(a.avg_max_speed) as "minMaxSpeed",
+			max(a.avg_active_rate) as "maxActiveRate",
+			min(a.avg_active_rate) as "minActiveRate",
+			max(a.avg_breakin_count) as "maxBreakinCount",
+			min(a.avg_breakin_count) as "minBreakinCount"
+		from
+		 (select
+			avg(t.ver_jump_avg_high) as "avg_ver_jump_avg_high",
+			avg(t.ver_jump_count) as "avg_ver_jump_count",
+			avg(t.breakin_avg_time) as "avg_breakin_avg_time",
+			avg(t.spurt_count) as "avg_spurt_count",
+			avg(t.ver_jump_max_high) as "avg_jump_max_high",
+			avg(t.max_speed) as "avg_max_speed",
+			avg(t.active_rate) as "avg_active_rate",
+			avg(t.breakin_count) as "avg_breakin_count"
+		from s_move t where t.del_flag = '0' group by t.vip_id) a
+	</select>
+    
+    <select id="findRadarByVipId" parameterType="java.lang.String" resultType="org.safari.sport.main.entity.Move" >
+    	select
+			avg(t.ver_jump_avg_high) as "avgVerJumpAvgHigh",
+			avg(t.ver_jump_count) as "avgVerJumpCount",
+			avg(t.breakin_avg_time) as "avgBreakinAvgTime",
+			avg(t.spurt_count) as "avgSpurtCount",
+			avg(t.ver_jump_max_high) as "avgJumpMaxHigh",
+			avg(t.max_speed) as "avgMaxSpeed",
+			max(t.active_rate) as "avgActiveRate",
+			min(t.breakin_count) as "avgBreakinCount"
+		from s_move t  where t.vip_id=#{vipId} and t.del_flag = '0'
+    </select>
+
+</mapper>

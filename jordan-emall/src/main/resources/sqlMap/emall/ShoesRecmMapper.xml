@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.emall.main.mapper.ShoesRecmMapper" >
+    <resultMap id="resultMap" type="org.safari.emall.main.entity.ShoesRecm" >
+        <id column="id"                                 property="id"                              jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="create_time"            property="createTime"                jdbcType="TIMESTAMP"       javaType="java.util.Date" />
+        <result column="create_by"               property="createBy"                    jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="modify_time"           property="modifyTime"               jdbcType="TIMESTAMP"       javaType="java.util.Date" />
+        <result column="modify_by"              property="modifyBy"                   jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="del_flag"                  property="delFlag"                      jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="remarks"                  property="remarks"                     jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="name"                      property="name"                        jdbcType="VARCHAR"          javaType="java.lang.String"  />
+        <result column="intro"                       property="intro"                          jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="thumb"                    property="thumb"                       jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="link"                         property="link"                            jdbcType="VARCHAR"           javaType="java.lang.String"  />
+        <result column="useable"                   property="useable"                     jdbcType="VARCHAR"           javaType="java.lang.String"  />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.create_by as "createBy", 
+        t.modify_time as "modifyTime", 
+        t.modify_by as "modifyBy", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        
+        t.name as "name", 
+        t.intro as "intro", 
+        concat(#{download},m.folder,"/",m.path) as "thumb",
+        t.link as "link", 
+        t.useable as "useable"
+    </sql>
+
+    <sql id="joins" >
+        left join sys_media m on m.id = t.thumb
+    </sql>
+    
+    <sql id="condition">
+    	<where>
+    		1=1 and t.del_flag = #{delFlag} and t.useable = #{useable}
+    		<if test="null != name and  '' !=name " >
+    			and t.name = #{name}
+    		</if>
+    	</where>
+    </sql>
+
+    <select id="findById"  resultType="org.safari.emall.main.entity.ShoesRecm" >
+        select 
+        <include refid="column_list" />
+        from e_shoes_recm t 
+        <include refid="joins" />
+        where t.id = #{id}
+    </select>
+
+    <select id="findCount" parameterType="org.safari.emall.main.entity.ShoesRecm" resultType="java.lang.Integer" >
+        select count(0) from e_shoes_recm t 
+        <include refid="condition" />
+    </select>
+
+    <select id="findPage" parameterType="org.safari.emall.main.entity.ShoesRecm" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from e_shoes_recm t 
+        <include refid="joins"/>
+        <include refid="condition" />
+        order by t.create_by desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+    
+    <select id="findAll" parameterType="org.safari.emall.main.entity.ShoesRecm" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from e_shoes_recm t 
+        <include refid="joins"/>
+        where t.del_flag = #{delFlag} and t.useable = #{useable}
+        order by t.create_time desc
+    </select>
+    
+</mapper>

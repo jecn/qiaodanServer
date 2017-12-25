@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.TrainMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.Train" >
+        <id column="id"                           property="id"                    jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="create_by"         property="createBy"          jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="create_time"      property="createTime"      jdbcType="TIMESTAMP"      javaType="java.util.Date" />
+        <result column="modify_by"        property="modifyBy"         jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="modify_time"     property="modifyTime"     jdbcType="TIMESTAMP"     javaType="java.util.Date" />
+        <result column="del_flag"            property="delFlag"            jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="remarks"            property="remarks"           jdbcType="VARCHAR"         javaType="java.lang.String" />
+        <result column="td_id"                 property="tdId"                jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="title"                   property="title"                jdbcType="VARCHAR"          javaType="java.lang.String" />
+<!--         <result column="type"                  property="type"               jdbcType="VARCHAR"          javaType="java.lang.String" /> -->
+        <result column="position"             property="position"         jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="intro"                  property="intro"              jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="thumb"               property="thumb"           jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="link"                    property="link"                jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="content"             property="content"          jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+        <result column="count"                property="count"             jdbcType="INTEGER"              javaType="java.lang.Integer" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_by as "createBy", 
+        t.create_time as "createTime", 
+        t.modify_by as "modifyBy", 
+        t.modify_time as "modifyTime", 
+        t.del_flag as "delFlag", 
+        t.remarks as "remarks", 
+        t.td_id as "tdId", 
+        t.title as "title", 
+<!--         t.type as "type",  -->
+        t.position as "position", 
+        t.intro as "intro", 
+        case 
+           when m.source = 1 then concat(#{download},m.folder,"/",m.path)
+		   when m.source = 2 then m.url
+		end as "thumb",
+       	t.link as "link", 
+       	t.content as "content",
+        t.count as "count"
+    </sql>
+    
+    <sql id="joins" >
+    	left join s_train_dict td on td.id = t.td_id
+        left join sys_media m on m.id = t.thumb
+    </sql>
+    
+    <sql id="condition" >
+    	<where>
+    		1=1 and t.del_flag = #{delFlag}
+    		<if test=" null != tdId and '' !=  tdId" >
+               and t.td_id = #{tdId}
+            </if>
+    		<if test=" null != title and '' !=  title" >
+                and t.title like concat('%',#{title},'%')
+            </if>
+<!--             <if test=" null != type and '' !=  type" > -->
+<!--                 and t.type = #{type} -->
+<!--             </if> -->
+            <if test=" null != position and '' !=  position" >
+               and t.position = #{position}
+            </if>
+    	</where>
+    </sql>
+
+    <select id="findById" resultType="org.safari.sport.main.entity.Train" >
+        select 
+        <include refid="column_list" />
+        from s_train t 
+        <include refid="joins" />
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.Train" >
+        insert into s_train
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+                id, create_time,
+            <if test=" null != createBy and '' !=  createBy" >
+                create_by,
+            </if>
+            <if test=" null != remarks and '' !=  remarks" >
+                remarks,
+            </if>
+            
+            <if test=" null != tdId and '' !=  tdId" >
+                td_id,
+            </if>
+            <if test=" null != title and '' !=  title" >
+                title,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != position and '' !=  position" >
+                position,
+            </if>
+            <if test=" null != intro and '' !=  intro" >
+                intro,
+            </if>
+            <if test=" null != thumb and '' !=  thumb" >
+                thumb,
+            </if>
+            <if test=" null != link and '' !=  link" >
+                link,
+            </if>
+            <if test=" null != content and '' !=  content" >
+                content,
+            </if>
+            <if test=" null != count" >
+                count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+                #{id}, now(),
+            <if test=" null != createBy and '' !=  createBy" >
+                #{createBy},
+            </if>
+            <if test=" null != remarks and '' !=  remarks" >
+                #{remarks},
+            </if>
+            
+            <if test=" null != tdId and '' !=  tdId" >
+                #{tdId},
+            </if>
+            <if test=" null != title and '' !=  title" >
+                #{title},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != position and '' !=  position" >
+                #{position},
+            </if>
+            <if test=" null != intro and '' !=  intro" >
+                #{intro},
+            </if>
+            <if test=" null != thumb and '' !=  thumb" >
+                #{thumb},
+            </if>
+            <if test=" null != link and '' !=  link" >
+                #{link},
+            </if>
+            <if test=" null != content and '' !=  content" >
+                #{content},
+            </if>
+            <if test=" null != count" >
+                #{count},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteById" parameterType="java.lang.String" >
+        update s_train set del_flag = #{deleteYes} where id = #{id}
+    </update>
+
+    <update id="deleteByIds" parameterType="java.util.List" >
+        update s_train set del_flag = #{deleteYes} where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="modify" parameterType="org.safari.sport.main.entity.Train" >
+        update s_train set 
+            modify_by = #{modifyBy},
+            modify_time = now(),
+            remarks = #{remarks},
+            td_id = #{tdId},
+            title = #{title},
+            type = #{type},
+            position = #{position},
+            intro = #{intro},
+            thumb = #{thumb},
+            link = #{link},
+            count = #{count}
+        where id = #{id}
+    </update>
+    
+    <update id="batchCount">
+	  <foreach collection="trains" item="item" index="index" open="" close="" separator=";">  
+	  	update s_train set count = count + #{item.count} where id = #{item.id}
+	  </foreach>
+    </update>
+    
+    <select id="findNewByTitle" parameterType="org.safari.sport.main.entity.Train" resultType="org.safari.sport.main.entity.Train">
+    	select 
+        <include refid="column_list" />
+        from s_train t 
+        <include refid="joins" />
+        where 1=1 and t.title =  #{title} and t.del_flag = #{delFlag}
+        order by t.create_time desc limit 1
+    </select>
+
+    <select id="findCount" parameterType="org.safari.sport.main.entity.Train" resultType="java.lang.Integer" >
+        select count(0) from s_train t 
+        <include refid="condition" />
+    </select>
+
+    <select id="findPage" parameterType="org.safari.sport.main.entity.Train" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from s_train t
+        <include refid="joins" />
+        <include refid="condition" />
+        order by t.create_time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+</mapper>

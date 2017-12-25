@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.pub.platform.mapper.CSReqMapper" >
+    <resultMap id="resultMap" type="org.safari.pub.platform.web.entity.CSReq" >
+        <id column="id" property="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="req_time" property="reqTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="country" property="country" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="area" property="area" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="region" property="region" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="city" property="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="county" property="county" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="isp" property="isp" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="terminal" property="terminal" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="device_name" property="deviceName" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="device_id" property="deviceId" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="device_os" property="deviceOs" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="device_token" property="deviceToken" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="device_ver" property="deviceVer" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="lang" property="lang" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="version" property="version" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="net_type" property="netType" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="sub_type" property="subType" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="inf_class" property="infClass" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="inf_method" property="infMethod" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="inf_desc" property="infDesc" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="data" property="data" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.req_time as "reqTime", 
+        t.ip as "ip", 
+        t.country as "country", 
+        t.area as "area", 
+        t.region as "region", 
+        t.city as "city", 
+        t.county as "county", 
+        t.isp as "isp", 
+        t.terminal as "terminal", 
+        t.device_name as "deviceName", 
+        t.device_id as "deviceId", 
+        t.device_os as "deviceOs", 
+        t.device_token as "deviceToken", 
+        t.device_ver as "deviceVer", 
+        t.lang as "lang", 
+        t.version as "version", 
+        t.net_type as "netType", 
+        t.sub_type as "subType", 
+        t.inf_class as "infClass", 
+        t.inf_method as "infMethod", 
+        t.inf_desc as "infDesc", 
+        t.data as "data"
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.pub.platform.web.entity.CSReq" >
+        select 
+        <include refid="column_list" />
+        from log_cs_req t 
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.pub.platform.web.entity.CSReq" >
+        insert into log_cs_req
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+              id,req_time,
+            <if test=" null != ip and '' !=  ip" >
+                ip,
+            </if>
+            <if test=" null != country and '' !=  country" >
+                country,
+            </if>
+            <if test=" null != area and '' !=  area" >
+                area,
+            </if>
+            <if test=" null != region and '' !=  region" >
+                region,
+            </if>
+            <if test=" null != city and '' !=  city" >
+                city,
+            </if>
+            <if test=" null != county and '' !=  county" >
+                county,
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                isp,
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                terminal,
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                device_name,
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                device_id,
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                device_os,
+            </if>
+            <if test=" null != deviceToken and '' !=  deviceToken" >
+                device_token,
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                device_ver,
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                lang,
+            </if>
+            <if test=" null != version and '' !=  version" >
+                version,
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                net_type,
+            </if>
+            <if test=" null != subType and '' !=  subType" >
+                sub_type,
+            </if>
+            <if test=" null != infClass and '' !=  infClass" >
+                inf_class,
+            </if>
+            <if test=" null != infMethod and '' !=  infMethod" >
+                inf_method,
+            </if>
+            <if test=" null != infDesc and '' !=  infDesc" >
+                inf_desc,
+            </if>
+            <if test=" null != data and '' !=  data" >
+                data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+                #{id},now(),
+            <if test=" null != ip and '' !=  ip" >
+                #{ip},
+            </if>
+            <if test=" null != country and '' !=  country" >
+                #{country},
+            </if>
+            <if test=" null != area and '' !=  area" >
+                #{area},
+            </if>
+            <if test=" null != region and '' !=  region" >
+                #{region},
+            </if>
+            <if test=" null != city and '' !=  city" >
+                #{city},
+            </if>
+            <if test=" null != county and '' !=  county" >
+                #{county},
+            </if>
+            <if test=" null != isp and '' !=  isp" >
+                #{isp},
+            </if>
+            <if test=" null != terminal and '' !=  terminal" >
+                #{terminal},
+            </if>
+            <if test=" null != deviceName and '' !=  deviceName" >
+                #{deviceName},
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                #{deviceId},
+            </if>
+            <if test=" null != deviceOs and '' !=  deviceOs" >
+                #{deviceOs},
+            </if>
+            <if test=" null != deviceToken and '' !=  deviceToken" >
+                #{deviceToken},
+            </if>
+            <if test=" null != deviceVer and '' !=  deviceVer" >
+                #{deviceVer},
+            </if>
+            <if test=" null != lang and '' !=  lang" >
+                #{lang},
+            </if>
+            <if test=" null != version and '' !=  version" >
+                #{version},
+            </if>
+            <if test=" null != netType and '' !=  netType" >
+                #{netType},
+            </if>
+            <if test=" null != subType and '' !=  subType" >
+                #{subType},
+            </if>
+            <if test=" null != infClass and '' !=  infClass" >
+                #{infClass},
+            </if>
+            <if test=" null != infMethod and '' !=  infMethod" >
+                #{infMethod},
+            </if>
+            <if test=" null != infDesc and '' !=  infDesc" >
+                #{infDesc},
+            </if>
+            <if test=" null != data and '' !=  data" >
+                #{data},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

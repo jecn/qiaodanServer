@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.user.main.mapper.VipMapper" >
+    <resultMap id="resultMap" type="org.safari.user.main.entity.Vip" >
+        <id column="id"                              property="id"                        jdbcType="VARCHAR"                javaType="java.lang.String" />
+        <result column="create_time"         property="createTime"          jdbcType="TIMESTAMP"             javaType="java.util.Date" />
+        <result column="username"            property="username"           jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="password"            property="password"             jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="open_id"              property="openId"                 jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="type"                   property="type"                     jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="name"                 property="name"                   jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="nick"                    property="nick"                     jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="img"                    property="img"                      jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="gender"               property="gender"                 jdbcType="VARCHAR"                 javaType="java.lang.String"  />
+        <result column="age"                    property="age"                      jdbcType="INTEGER"                   javaType="java.lang.Integer" />
+        <result column="birthday"             property="birthday"               jdbcType="DATE"                        javaType="java.lang.String" />
+        <result column="mobile"               property="mobile"                 jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="email"                 property="email"                   jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="qq"                     property="qq"                        jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="position"             property="position"               jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="height"               property="height"                  jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="weight"               property="weight"                 jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="footer"                property="footer"                  jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="qr"                      property="qr"                         jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+        <result column="stat"                    property="stat"                      jdbcType="VARCHAR"                  javaType="java.lang.String"  />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.username as "username", 
+        t.password as "password", 
+        t.open_id as "openId", 
+        t.type as "type", 
+        t.name as "name", 
+        t.nick as "nick", 
+        t.img as "imgId", 
+        case 
+           when m.source = 1 then concat(#{download},m.folder,"/",m.path)
+		   when m.source = 2 then m.url
+		end as "img",
+        
+        t.gender as "gender", 
+        if(t.age = 0 ,null,t.age) as "age", 
+        if(t.birthday = null,"",unix_timestamp(t.birthday)) as "birthday", 
+        t.mobile as "mobile", 
+        t.email as "email", 
+        t.qq as "qq", 
+        t.position as "position", 
+        t.height as "height", 
+        t.weight as "weight", 
+        t.footer as "footer", 
+        concat(#{download},m1.folder,"/",m1.path) as "qr",
+        t.stat as "stat"
+    </sql>
+
+    <sql id="joins" >
+        left join sys_media m on m.id = t.img
+        left join sys_media m1 on m1.id = t.qr
+    </sql>
+
+    <select id="findById" parameterType="java.lang.String" resultType="org.safari.user.main.entity.Vip" >
+        select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="register" parameterType="org.safari.user.main.entity.Vip" >
+        insert into u_vip
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+              create_time,
+            <if test=" null != username and '' !=  username" >
+                username,
+            </if>
+            <if test=" null != password and '' !=  password" >
+                password,
+            </if>
+            <if test=" null != openId and '' !=  openId" >
+                open_id,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+            <if test=" null != name and '' !=  name" >
+                name,
+            </if>
+            <if test=" null != nick and '' !=  nick" >
+                nick,
+            </if>
+            <if test=" null != img and '' !=  img" >
+                img,
+            </if>
+            <if test=" null != gender and '' !=  gender" >
+                gender,
+            </if>
+            <if test=" null != age" >
+                age,
+            </if>
+            <if test=" null != birthday and '' !=  birthday" >
+                birthday,
+            </if>
+            <if test=" null != mobile and '' !=  mobile" >
+                mobile,
+            </if>
+            <if test=" null != email and '' !=  email" >
+                email,
+            </if>
+            <if test=" null != qq and '' !=  qq" >
+                qq,
+            </if>
+            <if test=" null != position and '' !=  position" >
+                position,
+            </if>
+            <if test=" null != height and '' !=  height" >
+                height,
+            </if>
+            <if test=" null != weight and '' !=  weight" >
+                weight,
+            </if>
+            <if test=" null != footer and '' !=  footer" >
+                footer,
+            </if>
+            <if test=" null != qr and '' !=  qr" >
+                qr,
+            </if>
+            <if test=" null != stat and '' !=  stat" >
+                stat,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+            	now(),
+            <if test=" null != username and '' !=  username" >
+                #{username},
+            </if>
+            <if test=" null != password and '' !=  password" >
+                #{password},
+            </if>
+            <if test=" null != openId and '' !=  openId" >
+                #{openId},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+            <if test=" null != name and '' !=  name" >
+                #{name},
+            </if>
+            <if test=" null != nick and '' !=  nick" >
+                #{nick},
+            </if>
+            <if test=" null != img and '' !=  img" >
+                #{img},
+            </if>
+            <if test=" null != gender and '' !=  gender" >
+                #{gender},
+            </if>
+            <if test=" null != age" >
+                #{age},
+            </if>
+            <if test=" null != birthday and '' !=  birthday" >
+                from_unixtime(#{birthday},'%Y-%m-%d'),
+            </if>
+            <if test=" null != mobile and '' !=  mobile" >
+                #{mobile},
+            </if>
+            <if test=" null != email and '' !=  email" >
+                #{email},
+            </if>
+            <if test=" null != qq and '' !=  qq" >
+                #{qq},
+            </if>
+            <if test=" null != position and '' !=  position" >
+                #{position},
+            </if>
+            <if test=" null != height and '' !=  height" >
+                #{height},
+            </if>
+            <if test=" null != weight and '' !=  weight" >
+                #{weight},
+            </if>
+            <if test=" null != footer and '' !=  footer" >
+                #{footer},
+            </if>
+            <if test=" null != qr and '' !=  qr" >
+                #{qr},
+            </if>
+            <if test=" null != stat and '' !=  stat" >
+                #{stat},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="findByUnique" resultType="org.safari.user.main.entity.Vip">
+    	 select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.${key} =#{value} and t.stat !='0'
+    </select>
+    
+    <select id="findByOpenIdAndType" resultType="org.safari.user.main.entity.Vip">
+    	select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.open_id =#{openId} and t.type =#{type} and t.stat !='0'
+    </select>
+    
+    <select id="findByUsernameAndPassword" resultType="org.safari.user.main.entity.Vip">
+    	select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.username =#{username} and t.password =#{password} and t.stat !='0'
+    </select>
+    
+    <select id="findByMobileAndPassword" resultType="org.safari.user.main.entity.Vip">
+    	select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.mobile =#{mobile} and t.password =#{password} and t.stat !='0'
+    </select>
+    
+    <select id="findByEmailAndPassword" resultType="org.safari.user.main.entity.Vip">
+    	select 
+        <include refid="column_list" />
+        from u_vip t 
+        <include refid="joins"/>
+        where t.email =#{email} and t.password =#{password} and t.stat !='0'
+    </select>
+    
+    <update id="updateSingle">
+    	update u_vip set 
+    	<if test="key =='birthday' and value !=null and value !=''">
+    		birthday = from_unixtime(#{value},'%Y-%m-%d')
+    	</if>
+    	<if test="key =='birthday' and (value ==null or value =='')">
+    		birthday = null
+    	</if>
+    	<if test="key =='name' or key =='nick' or key =='gender'  or key =='age' 
+    		or key =='qq' or key == 'qr' or key =='img' or key == 'position' 
+    		or key == 'height'  or key == 'weight' or key == 'footer'">
+    		${key}= #{value}
+    	</if>
+    	where id = #{id}
+    </update>
+    
+    <update id="updateBind">
+    	update u_vip set 
+    	<if test="key =='email' ">
+    		${key}= #{value}
+    	</if>
+    	where id = #{id}
+    </update>
+    
+    <update id="updatePassword">
+    	update u_vip set password=#{password} where id = #{id}
+    </update>
+    
+    <update id = "modify"  parameterType="org.safari.user.main.entity.Vip" >
+    	update u_vip set
+    	 name = #{name},
+    	 nick = #{nick},
+    	 img = #{img},
+         gender = #{gender},
+         age = #{age},
+         <if test="birthday != null and '' !=birthday" >
+             birthday = from_unixtime(#{birthday},'%Y-%m-%d'),
+         </if>
+         <if test="birthday == null or '' ==birthday" >
+             birthday = null,
+         </if>
+          email = #{email},
+          qq = #{qq},
+          position = #{position},
+          height = #{height},
+          weight = #{weight},
+          footer = #{footer},
+          qr = #{qr}
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="org.safari.user.main.entity.Vip" >
+        update u_vip
+        <set >
+            <if test="name != null and '' !=  name" >
+                name = #{name},
+            </if>
+            <if test="nick != null and '' !=  nick" >
+                nick = #{nick},
+            </if>
+            <if test="img != null and '' !=  img" >
+                img = #{img},
+            </if>
+            <if test="gender != null and '' !=  gender" >
+                gender = #{gender},
+            </if>
+            <if test="age != null" >
+                age = #{age},
+            </if>
+            <if test="birthday != null and '' !=birthday" >
+                birthday = from_unixtime(#{birthday},'%Y-%m-%d'),
+            </if>
+            <if test="birthday == null or '' ==birthday" >
+             	birthday = null,
+         	</if>
+            <if test="qq != null and '' !=  qq" >
+                qq = #{qq},
+            </if>
+            <if test="qr != null and '' !=  qr" >
+                qr = #{qr},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,306 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- 聚合系统的根系统 -->
+
+  <groupId>org.safari</groupId>
+  <artifactId>jordan-root</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>jordan-root</name>
+  <url>http://maven.apache.org</url>
+
+ <modules>
+  <!-- 声明聚合的子模块, 依声明顺序依次构建-->
+  <module>../jordan-sys</module>
+  <module>../jordan-log</module>
+  <module>../jordan-sport</module>
+  <module>../jordan-emall</module>
+  <module>../jordan-web</module>
+  </modules>
+  
+  <!-- 常量定义 -->
+  <properties>
+	  <spring-version>4.1.2.RELEASE</spring-version>
+	  <logback-version>1.1.3</logback-version>
+	  <commons-version>2.2</commons-version>
+	  <jackson-vesion>2.1.0</jackson-vesion>
+	  <junit-version>4.7</junit-version>
+	  <jdk-version>1.7</jdk-version>
+	  <encode>UTF-8</encode>
+	  
+	  <filters.base.path.main>src/main/filters</filters.base.path.main>
+	  <filters.base.path.test>src/test/filters</filters.base.path.test>
+  </properties>
+  
+  
+  <!-- 依赖配置 -->
+  <dependencyManagement>
+	<dependencies>
+		<dependency>
+		    <groupId>org.safari</groupId>
+		    <artifactId>jordan-pub</artifactId>
+		    <version>0.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<!-- SPRING -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.2.8</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.11</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.2.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		
+		<dependency> 
+ 			<groupId>net.sf.json-lib</groupId>
+ 			<artifactId>json-lib</artifactId> 
+ 			<version>2.4</version> 
+ 		</dependency>
+ 		
+ 		<dependency>
+    		<groupId>net.sf.ehcache</groupId>
+    		<artifactId>ehcache</artifactId>
+    		<version>2.10.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-vesion}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-vesion}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>19.0</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.google.zxing</groupId>
+    		<artifactId>core</artifactId>
+    		<version>3.2.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>alipay</artifactId>
+			<version>2016</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.lucee</groupId>
+		    <artifactId>commons-httpclient</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>tools</artifactId>
+			<version>${jdk.version}</version>
+			<scope>system</scope>
+			<systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.26</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+  
+      <build>  
+        <pluginManagement>  
+            <plugins>  
+            
+	            <plugin>
+					<groupId>org.apache.maven.plugins</groupId> 
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<encoding>${encode}</encoding>
+					</configuration>
+				</plugin>
+  
+                <plugin>  
+                    <groupId>org.apache.maven.plugins</groupId>  
+                    <artifactId>maven-resources-plugin</artifactId>  
+                    <version>2.6</version>  
+                    <configuration>  
+                        <encoding>${encode}</encoding>  
+                    </configuration>  
+                </plugin>  
+  
+  				<!-- 编译插件 -->
+                <plugin>  
+                    <groupId>org.apache.maven.plugins</groupId>  
+                    <artifactId>maven-compiler-plugin</artifactId>  
+                    <version>3.1</version>  
+                    <configuration>
+					<source>${jdk-version}</source>
+					<target>${jdk-version}</target>
+					<encoding>${encode}</encoding>
+					<showWarnings>true</showWarnings>
+					<compilerArguments>  
+                  	  	<verbose />  
+                  	  	<!-- 设置的java_home下面的lib/dt.jar中没有这个文件，导致编译失败。
+                  	  	       通过配置maven-compiler-plugin插件可以解决此问题。 -->
+             	 		<bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>  
+     				</compilerArguments>  
+     				</configuration>
+                </plugin>  
+  
+            </plugins>  
+        </pluginManagement>  
+  
+    </build>  
+</project>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.JoinReachMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.JoinReach" >
+        <id column="id"                          property="id"                     jdbcType="VARCHAR"           javaType="java.lang.String" />
+        <result column="create_time"     property="createTime"       jdbcType="TIMESTAMP"       javaType="java.util.Date" />
+        <result column="vip_id"              property="vipId"                 jdbcType="VARCHAR"          javaType="java.lang.String" />
+        <result column="rb_id"               property="rbId"                  jdbcType="VARCHAR"           javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.vip_id as "vipId", 
+        t.rb_id as "rbId",
+        
+        rb.id as "reachBall.id",
+        unix_timestamp(rb.create_time)  as "reachBall.publish", 
+        rb.remarks as "reachBall.remarks", 
+        rb.vip_id as "reachBall.vipId", 
+        rb.slogan as "reachBall.slogan", 
+        case 
+           when m1.source = 1 then concat(#{download},m1.folder,"/",m1.path)
+		   when m1.source = 2 then m1.url
+		end as "reachBall.vipImg",
+        unix_timestamp(rb.time)  as "reachBall.time", 
+        rb.duration as "reachBall.duration",
+        rb.people as "reachBall.people", 
+        rb.type as "reachBall.type", 
+        concat(#{download},m2.folder,"/",m2.path) as "reachBall.picture",
+        rb.longitude as "reachBall.longitude", 
+        rb.latitude as "reachBall.latitude", 
+        rb.province as "reachBall.province", 
+        rb.city as "reachBall.city", 
+        rb.district as "reachBall.district", 
+        rb.street as "reachBall.street", 
+        rb.address as "reachBall.address",
+        v.mobile as "reachBall.mobile", 
+        ifnull(v.nick,ifnull(v.name,v.username)) as "reachBall.contact"
+    </sql>
+    
+    <sql id= "joins">
+    	left join u_vip v on v.id = rb.vip_id
+    	left join sys_media m1 on m1.id = v.img
+    	left join sys_media m2 on m2.id = rb.picture
+    </sql>
+    
+    <sql id="condition">
+    	<where>
+    		1 = 1 and rb.id = t.rb_id
+    		<if test="null != vipId and '' != vipId">
+    			and t.vip_id = #{vipId}
+    		</if>
+    		<if test="null != rbId and '' != rbId">
+    			and t.rb_id = #{rbId}
+    		</if>
+    		<if test=" null != beginTime and  '' !=beginTime and '-1' != beginTime" >
+                and unix_timestamp(rb.time) &gt;= #{beginTime}
+            </if>
+    	</where>
+    </sql>
+
+    <select id="findById" resultType="org.safari.sport.main.entity.JoinReach" >
+        select 
+        <include refid="column_list" />
+        from s_join_reach t,s_reach_ball rb
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.JoinReach" >
+        insert into s_join_reach
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != rbId and '' !=  rbId" >
+                rb_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != rbId and '' !=  rbId" >
+                #{rbId},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="findJoinReachByRdId" resultMap="resultMap" >
+    	select 
+    		t.id as "id",
+    		t.vip_id as "vipId",
+    		t.rb_id as "rbId",
+    		v.id as "vip.id", 
+    		v.name as "vip.name", 
+            v.nick as "vip.nick", 
+            case 
+	           when m.source = 1 then concat(#{download},m.folder,"/",m.path)
+			   when m.source = 2 then m.url
+			end as "vip.img",
+			v.mobile as "vip.mobile"
+		from s_join_reach t
+		left join u_vip v on v.id = t.vip_id
+		left join sys_media m on m.id = v.img
+		where t.rb_id = #{rbId}
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" >
+        select count(0) from s_join_reach t ,s_reach_ball rb
+        <include refid="condition"/>
+    </select>
+    
+    <select id="findPage" parameterType="org.safari.sport.main.entity.JoinReach" resultMap="resultMap" >
+        select 
+        <include refid="column_list" />
+        from s_join_reach t ,s_reach_ball rb
+        <include refid="joins"/>
+        <include refid="condition"/>
+        order by rb.time desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sport.main.mapper.CourtMapper" >
+    <resultMap id="resultMap" type="org.safari.sport.main.entity.Court" >
+        <id column="id"                           property="id"                   jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="create_time"      property="createTime"     jdbcType="TIMESTAMP"     javaType="java.util.Date" />
+        <result column="vip_id"               property="vipId"               jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="name"               property="name"              jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="longitude"         property="longitude"        jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="latitude"            property="latitude"           jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="province"          property="province"          jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="city"                  property="city"                  jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="district"             property="district"             jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="street"               property="street"              jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="address"            property="address"           jdbcType="VARCHAR"        javaType="java.lang.String" />
+        <result column="picture"             property="picture"            jdbcType="VARCHAR"        javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.create_time as "createTime", 
+        t.vip_id as "vipId", 
+        t.name as "name", 
+        t.longitude as "longitude", 
+        t.latitude as "latitude", 
+        t.province as "province", 
+        t.city as "city", 
+        t.district as "district", 
+        t.street as "street", 
+        t.address as "address",
+        concat(#{download},m.folder,"/",m.path) as "picture"
+    </sql>
+    
+    <sql id="joins">
+    	left join sys_media m on m.id = t.picture
+    </sql>
+    
+    <sql id="condition">
+    	<where>
+    		1 = 1  
+    		<if test=" null != limited and '' !=  limited" >
+    			and round(count_distance(#{latitude},#{longitude}, latitude, longitude), 3) &lt;= #{limited}
+    		</if>
+    	</where>
+    </sql>
+
+    <select id="findById" resultType="org.safari.sport.main.entity.Court" >
+        select 
+        <include refid="column_list" />
+        from s_court t 
+        <include refid="joins" />
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.safari.sport.main.entity.Court" >
+        insert into s_court
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+                create_time,
+            <if test=" null != vipId and '' !=  vipId" >
+                vip_id,
+            </if>
+            <if test=" null != name and '' !=  name" >
+                name,
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                longitude,
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                latitude,
+            </if>
+            <if test=" null != province and '' !=  province" >
+                province,
+            </if>
+            <if test=" null != city and '' !=  city" >
+                city,
+            </if>
+            <if test=" null != district and '' !=  district" >
+                district,
+            </if>
+            <if test=" null != street and '' !=  street" >
+                street,
+            </if>
+            <if test=" null != address and '' !=  address" >
+                address,
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                picture,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+                now(),
+            <if test=" null != vipId and '' !=  vipId" >
+                #{vipId},
+            </if>
+            <if test=" null != name and '' !=  name" >
+                #{name},
+            </if>
+            <if test=" null != longitude and '' !=  longitude" >
+                #{longitude},
+            </if>
+            <if test=" null != latitude and '' !=  latitude" >
+                #{latitude},
+            </if>
+            <if test=" null != province and '' !=  province" >
+                #{province},
+            </if>
+            <if test=" null != city and '' !=  city" >
+                #{city},
+            </if>
+            <if test=" null != district and '' !=  district" >
+                #{district},
+            </if>
+            <if test=" null != street and '' !=  street" >
+                #{street},
+            </if>
+            <if test=" null != address and '' !=  address" >
+                #{address},
+            </if>
+            <if test=" null != picture and '' !=  picture" >
+                #{picture},
+            </if>
+        </trim>
+    </insert>
+
+	<select id="findPosition"  resultType="java.lang.Integer" >
+        select count(0) from s_court t
+        where t.longitude &gt;=#{minlng} and t.longitude &lt;=#{maxlng}
+        and t.latitude &gt;=#{minlat} and t.latitude &lt;=#{maxlat}
+    </select>
+
+    <select id="findCount" parameterType="org.safari.sport.main.entity.Court" resultType="java.lang.Integer" >
+        select count(0) from s_court t 
+        <include refid="condition" />
+    </select>
+
+    <select id="findPage" parameterType="org.safari.sport.main.entity.Court" resultMap="resultMap" >
+        select 
+        <include refid="column_list" /> ,
+        round(count_distance(#{latitude},#{longitude}, latitude, longitude), 3) as "distance"
+        from s_court t
+        <include refid="joins" /> 
+        <include refid="condition" />
+        order by distance asc
+        limit #{pageIndex},#{pageSize}
+    </select>
+    
+</mapper>

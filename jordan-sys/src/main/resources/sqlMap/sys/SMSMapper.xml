@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.safari.sys.main.mapper.SMSMapper" >
+    <resultMap id="resultMap" type="org.safari.sys.main.entity.SMS" >
+        <id column="id"                              property="id"                          jdbcType="VARCHAR"            javaType="java.lang.String" />
+        <result column="device_id"             property="deviceId"                jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="account"               property="account"                jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="type"                     property="type"                     jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="send_time"            property="sendTime"             jdbcType="TIMESTAMP"          javaType="java.util.Date" />
+        <result column="send_type"            property="sendType"              jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="send_stat"             property="sendStat"               jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="res_code"              property="resCode"                jdbcType="VARCHAR"             javaType="java.lang.String" />
+        <result column="res_msg"               property="resMsg"                 jdbcType="VARCHAR"              javaType="java.lang.String" />
+        <result column="code"                    property="code"                    jdbcType="VARCHAR"              javaType="java.lang.String" />
+        <result column="valid_time"            property="validTime"             jdbcType="TIMESTAMP"           javaType="java.util.Date" />
+        <result column="valid_stat"             property="validStat"               jdbcType="VARCHAR"              javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column_list" >
+        t.id as "id", 
+        t.device_id as "deviceId",
+        t.account as "account", 
+        t.type as "type", 
+        t.send_time as "sendTime", 
+        t.send_type as "sendType", 
+        t.send_stat as "sendStat", 
+        t.res_code as "resCode", 
+        t.res_msg as "resMsg", 
+        t.code as "code", 
+        t.valid_time as "validTime", 
+        t.valid_stat as "validStat"
+    </sql>
+
+    <insert id="insert" parameterType="org.safari.sys.main.entity.SMS" >
+        insert into sys_sms
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                id,
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                device_id,
+            </if>
+            <if test=" null != account and '' !=  account" >
+                account,
+            </if>
+            <if test=" null != type and '' !=  type" >
+                type,
+            </if>
+             send_time,
+            <if test=" null != sendType and '' !=  sendType" >
+                send_type,
+            </if>
+            <if test=" null != sendStat and '' !=  sendStat" >
+                send_stat,
+            </if>
+            <if test=" null != resCode and '' !=  resCode" >
+                res_code,
+            </if>
+            <if test=" null != resMsg and '' !=  resMsg" >
+                res_msg,
+            </if>
+            <if test=" null != code and '' !=  code" >
+                code,
+            </if>
+            <if test=" null != validStat and '' !=  validStat" >
+                valid_stat,
+            </if>
+            <if test=" null != content and '' !=  content" >
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test=" null != id and '' !=  id" >
+                #{id},
+            </if>
+            <if test=" null != deviceId and '' !=  deviceId" >
+                #{deviceId},
+            </if>
+            <if test=" null != account and '' !=  account" >
+                #{account},
+            </if>
+            <if test=" null != type and '' !=  type" >
+                #{type},
+            </if>
+                now(),
+            <if test=" null != sendType and '' !=  sendType" >
+                #{sendType},
+            </if>
+            <if test=" null != sendStat and '' !=  sendStat" >
+                #{sendStat},
+            </if>
+            <if test=" null != resCode and '' !=  resCode" >
+                #{resCode},
+            </if>
+            <if test=" null != resMsg and '' !=  resMsg" >
+                #{resMsg},
+            </if>
+            <if test=" null != code and '' !=  code" >
+                #{code},
+            </if>
+            <if test=" null != validStat and '' !=  validStat" >
+                #{validStat},
+            </if>
+            <if test=" null != content and '' !=  content" >
+                #{content},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="findValid" resultType="org.safari.sys.main.entity.SMS">
+    	select 
+    	<include refid="column_list" />
+        from sys_sms t
+        where t.account = #{account} and t.send_type = #{sendType} and t.send_stat = #{sendStat}
+        and t.valid_stat=#{validStat} and (unix_timestamp(now()) - unix_timestamp(t.send_time)) &lt;= #{limit}
+        order by t.send_time desc
+    </select>
+
+	<update id="updateValid" parameterType="org.safari.sys.main.entity.SMS">
+		update sys_sms set valid_stat=#{validStat},valid_time=now() where id=#{id}
+	</update>
+	
+	<select id="findValidDeviceId" resultType="java.lang.Integer">
+		select count(0) from  sys_sms t where t.device_id = #{deviceId}  and t.type='1'
+		and t.send_type = #{sendType}  and (unix_timestamp(now()) - unix_timestamp(t.send_time)) &lt;= #{time}
+		order by t.send_time desc
+	</select>
+	
+	<select id="findValidMobile" resultType="java.lang.Integer">
+		select count(0) from  sys_sms t where t.account = #{mobile} and t.type='1'
+		and t.send_type = #{sendType}   and (unix_timestamp(now()) - unix_timestamp(t.send_time)) &lt;= #{time}
+		order by t.send_time desc
+	</select>
+
+</mapper>
